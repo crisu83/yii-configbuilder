@@ -9,8 +9,8 @@ To use the config builder you simply need to load it in your entry script:
 
 ```php
 <?php
-$yii = __DIR__ . '/../app/vendor/yiisoft/yii/framework/yii.php';
-$builder = __DIR__ . '/../app/helpers/ConfigBuilder.php';
+$yii = __DIR__ . '/path/to/yii.php';
+$builder = __DIR__ . '/path/to/ConfigBuilder.php';
 
 require_once($yii);
 require_once($builder);
