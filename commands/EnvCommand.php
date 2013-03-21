@@ -65,11 +65,15 @@ EOD;
 
 		if (!file_exists($envConfig))
 		{
+			if (!$this->confirm('Configuration file does not exist, do you want to create it?', true))
+				return 0;
+
 			file_put_contents($envConfig, "<?php\n// {$envName} environment configuration.\nreturn array(\n);\n");
 			@chmod($envConfig, 0644);
+			echo "\nConfiguration file created.`\n";
 		}
 
 		echo "\nEnvironment set to `{$envName}`.\n";
-		return 0; // all ok.
+		return 0;
 	}
 }
