@@ -29,6 +29,8 @@ class ConfigBuilder
 					continue;
 				$config = require($config);
 			}
+			if (!is_array($config))
+				continue;
 			$result = CMap::mergeArray($result, $config);
 		}
 		return $result;
