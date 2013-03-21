@@ -61,6 +61,14 @@ EOD;
 			@chmod($envFile, 0644);
 
 		file_put_contents($envFile, $envName);
+		$envConfig = $envPath . DIRECTORY_SEPARATOR . $envName . '.php';
+
+		if (!file_exists($envConfig))
+		{
+			file_put_contents($envConfig, "<?php\n// {$envName} environment configuration.\nreturn array(\n);\n");
+			@chmod($envConfig, 0644);
+		}
+
 		echo "\nEnvironment set to `{$envName}`.\n";
 		return 0; // all ok.
 	}
