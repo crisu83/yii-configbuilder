@@ -14,7 +14,15 @@ class EnvCommand extends CConsoleCommand
 	/**
 	 * @var string the path to the environment configurations.
 	 */
-	public $envPath = 'application.config.environments';
+	public $runtimePath = 'application.runtime';
+	/**
+	 * @var array a list of application environment paths.
+	 */
+	public $envPaths = array('application.config.environments');
+	/**
+	 * @var string the name of the file for holding the environment name.
+	 */
+	public $envFile = 'environment';
 
 	/**
 	 * Provides the command description.
@@ -50,30 +58,38 @@ EOD;
 			$this->usageError('The environment name is not specified.');
 
 		$envName = $args[0];
-		$envPath = Yii::getPathOfAlias($this->envPath);
+		$runtimePath = Yii::getPathOfAlias($this->runtimePath);
 
-		if (!is_dir($envPath) && !mkdir($envPath, 0777, true))
-			throw new CException('Failed to create the environments directory.');
+		if (!is_dir($runtimePath) && !mkdir($runtimePath, 0777, true))
+			throw new CException('Failed to create the runtime directory.');
 
-		$envFile = $envPath . DIRECTORY_SEPARATOR . 'env';
+		$envFile = $runtimePath . DIRECTORY_SEPARATOR . $this->envFile;
 
 		if (!file_exists($envFile))
 			@chmod($envFile, 0644);
 
 		file_put_contents($envFile, $envName);
-		$envConfig = $envPath . DIRECTORY_SEPARATOR . $envName . '.php';
 
-		if (!file_exists($envConfig))
+		foreach ($this->envPaths as $path)
 		{
-			if (!$this->confirm('Configuration file does not exist, do you want to create it?', true))
-				return 0;
+			$envPath = Yii::getPathOfAlias($path);
 
-			file_put_contents($envConfig, "<?php\n// {$envName} environment configuration.\nreturn array(\n);\n");
-			@chmod($envConfig, 0644);
-			echo "\nConfiguration file created.`\n";
+			if (!is_dir($envPath) && !mkdir($envPath, 0777, true))
+				throw new CException('Failed to create the environments directory.');
+
+			$configFile = $envPath . DIRECTORY_SEPARATOR . $envName . '.php';
+			if (!file_exists($configFile))
+			{
+				if (!$this->confirm("File `{$configFile}` does not exist, do you want to create it?", true))
+					continue;
+
+				file_put_contents($configFile, "<?php\n// {$envName} environment configuration.\nreturn array(\n);\n");
+				@chmod($configFile, 0664);
+				echo "Configuration file created.`\n";
+			}
 		}
 
-		echo "\nEnvironment set to `{$envName}`.\n";
+		echo "Environment set to `{$envName}`.\n";
 		return 0;
 	}
 }

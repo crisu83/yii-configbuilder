@@ -19,19 +19,17 @@ class EnvConfigBuilder extends ConfigBuilder
 	 * @param string $envPath the path to the environment configurations.
 	 * @return array the configuration.
 	 */
-	public static function build($array, $envPath)
+	public static function build($array, $envFile)
 	{
-		$result = parent::build($array);
-		$envFile = $envPath . DIRECTORY_SEPARATOR . 'env';
-		if (!file_exists($envFile))
-			throw new CException('Environment not set.');
-		$envName = file_get_contents($envFile);
-		$envConfig = $envPath . DIRECTORY_SEPARATOR . $envName . '.php';
-		if (!file_exists($envConfig))
-			throw new CException('Environment file does not exist.');
-		$config = require($envConfig);
-		if (!is_array($config))
-			throw new CException('Environment file does not return an array.');
-		return CMap::mergeArray($result, $config);
+		if (file_exists($envFile))
+		{
+			$envName = file_get_contents($envFile);
+			foreach ($array as $i => $config)
+			{
+				if (is_string($config))
+					$array[$i] = str_replace('{environment}', $envName, $config);
+			}
+		}
+		return parent::build($array);
 	}
 }
