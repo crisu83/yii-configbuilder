@@ -46,7 +46,6 @@ return array(
             // optional configurations
             'runtimePath' => 'application.runtime', // the path to the application runtime folder
             'envPaths' => array('application.config.environments'), // the paths to application environment configs
-            'envFile' => 'environment', // the name of the file for holding the active environment name
         ),
     ),
 );
