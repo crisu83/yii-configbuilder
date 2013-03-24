@@ -30,11 +30,11 @@ Yii::createWebApplication($config)->run();
 
 ## Environment specific configurations
 
-If you need different environments in your application you can use the `EnvConfigBuilder` together with the `EnvCommand` to easily set environment specific configurations. 
+If you need different environments in your application you can use the **EnvConfigBuilder** together with the **EnvCommand** to easily set environment specific configurations. 
 
 ### Configuration
 
-Add the `EnvCommand` to your console config file (normally found in `protected/config/console.php`):
+Add the env command to your console config file (usually **protected/config/console.php**):
 
 ```php
 // console application configuration
@@ -54,7 +54,7 @@ return array(
 
 ### Usage
 
-Update your entry script to use the `EnvConfigBuilder`:
+Update your entry script (usually **index.php**) to use the **EnvConfigBuilder**:
 
 ```php
 <?php
@@ -75,7 +75,7 @@ Yii::createWebApplication($config)->run();
 ```
 ***index.php***
 
-Now you can use the `EnvCommand` to set the active environment (replace `{environment}` is the name of the environment):
+Now you can use the env command to set the active environment (replace `{environment}` is the name of the environment):
 
 ```
 yiic env {environment}
