@@ -19,10 +19,6 @@ class EnvCommand extends CConsoleCommand
 	 * @var array a list of application environment paths.
 	 */
 	public $envPaths = array('application.config.environments');
-	/**
-	 * @var string the name of the file for holding the environment name.
-	 */
-	public $envFile = 'environment';
 
 	/**
 	 * Provides the command description.
@@ -63,7 +59,7 @@ EOD;
 		if (!is_dir($runtimePath) && !mkdir($runtimePath, 0777, true))
 			throw new CException('Failed to create the runtime directory.');
 
-		$envFile = $runtimePath . DIRECTORY_SEPARATOR . $this->envFile;
+		$envFile = $runtimePath . DIRECTORY_SEPARATOR . 'environment';
 
 		if (!file_exists($envFile))
 			@chmod($envFile, 0644);

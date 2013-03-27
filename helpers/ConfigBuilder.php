@@ -31,8 +31,34 @@ class ConfigBuilder
 			}
 			if (!is_array($config))
 				continue;
-			$result = CMap::mergeArray($result, $config);
+			$result = self::mergeArray($result, $config);
 		}
 		return $result;
+	}
+
+	/**
+	 * Merges two or more arrays into one recursively.
+	 * @param array $a array to be merged to
+	 * @param array $b array to be merged from.
+	 * @return array the merged array.
+	 */
+	protected static function mergeArray($a, $b)
+	{
+		$args = func_get_args();
+		$res = array_shift($args);
+		while (!empty($args))
+		{
+			$next = array_shift($args);
+			foreach ($next as $k => $v)
+			{
+				if (is_integer($k))
+					isset($res[$k]) ? $res[] = $v : $res[$k] = $v;
+				else if (is_array($v) && isset($res[$k]) && is_array($res[$k]))
+					$res[$k] = self::mergeArray($res[$k],$v);
+				else
+					$res[$k] = $v;
+			}
+		}
+		return $res;
 	}
 }
