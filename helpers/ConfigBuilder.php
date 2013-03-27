@@ -37,6 +37,26 @@ class ConfigBuilder
 	}
 
 	/**
+	 * Builds a configuration from the given array.
+	 * @param array $array the configuration parts.
+	 * @param string $envPath the path to the environment configurations.
+	 * @return array the configuration.
+	 */
+	public static function buildForEnv($array, $envFile)
+	{
+		if (file_exists($envFile))
+		{
+			$envName = file_get_contents($envFile);
+			foreach ($array as $i => $config)
+			{
+				if (is_string($config))
+					$array[$i] = str_replace('{environment}', $envName, $config);
+			}
+		}
+		return self::build($array);
+	}
+
+	/**
 	 * Merges two or more arrays into one recursively.
 	 * @param array $a array to be merged to
 	 * @param array $b array to be merged from.

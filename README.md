@@ -30,7 +30,7 @@ Yii::createWebApplication($config)->run();
 
 ## Environment specific configurations
 
-If you need different environments in your application you can use the **EnvConfigBuilder** together with the **EnvCommand** to easily set environment specific configurations. 
+If you need different environments in your application you can use the **buildForEnv** method together with the **EnvCommand** to easily set environment specific configurations.
 
 ### Configuration
 
@@ -54,24 +54,16 @@ return array(
 
 ### Usage
 
-Update your entry script (usually **index.php**) to use the **EnvConfigBuilder**:
+Update your entry script (usually **index.php**) to use the **buildForEnv** method.
 
 ```php
 <?php
-$yii = __DIR__ . '/path/to/yii.php';
-$builder = __DIR__ . '/path/to/EnvConfigBuilder.php';
-
-require_once($yii);
-require_once($builder);
-
-$config = EnvConfigBuilder::build(array(
+$config = ConfigBuilder::buildForEnv(array(
     __DIR__ . '/protected/config/common.php',
     __DIR__ . '/protected/config/web.php',
     __DIR__ . '/protected/config/environments/{environment}.php',
     __DIR__ . '/protected/config/local.php',
 ), __DIR__ . '/protected/runtime/environment');
-
-Yii::createWebApplication($config)->run();
 ```
 ***index.php***
 
