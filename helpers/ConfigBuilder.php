@@ -31,8 +31,33 @@ class ConfigBuilder
 			}
 			if (!is_array($config))
 				continue;
-			$result = CMap::mergeArray($result, $config);
+			$result = self::mergeArray($result, $config);
 		}
 		return $result;
+	}
+	
+	/**
+	 * Copied from CMap since the framework code is not available during 
+	 * creation of the configuration in yiic.php
+	 * @see CMap::mergeArray
+	 */
+	public static function mergeArray($a,$b)
+	{
+		$args=func_get_args();
+		$res=array_shift($args);
+		while(!empty($args))
+		{
+			$next=array_shift($args);
+			foreach($next as $k => $v)
+			{
+				if(is_integer($k))
+					isset($res[$k]) ? $res[]=$v : $res[$k]=$v;
+				else if(is_array($v) && isset($res[$k]) && is_array($res[$k]))
+					$res[$k]=self::mergeArray($res[$k],$v);
+				else
+					$res[$k]=$v;
+			}
+		}
+		return $res;
 	}
 }
